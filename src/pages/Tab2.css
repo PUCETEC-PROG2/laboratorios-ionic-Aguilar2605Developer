@@ -1,0 +1,18 @@
+.tab2-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-card {
+  width: 90%;
+  margin: 20px auto;
+}
+
+.form-input {
+  margin-bottom: 15px;
+}
+
+.save-button {
+  margin-top: 20px;
+}

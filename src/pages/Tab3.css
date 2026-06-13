@@ -1,0 +1,18 @@
+.profile-card {
+  margin-top: 20px;
+}
+
+.profile-header {
+  text-align: center;
+}
+
+.profile-avatar {
+  margin: auto;
+  width: 100px; 
+  height: 100px;
+}
+
+.profile-content {
+  text-align: center;
+  padding-top: 10px;
+}

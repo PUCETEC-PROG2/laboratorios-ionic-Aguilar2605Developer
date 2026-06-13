@@ -1,5 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonTextarea, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/react';
 import './Tab2.css';
 
 const Tab2: React.FC = () => {
@@ -7,16 +6,23 @@ const Tab2: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 2</IonTitle>
+          <IonTitle>DM - IONIC</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 2</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 2 page" />
+      <IonContent className="tab2-content">
+        <IonCard className="form-card">
+          <IonCardHeader>
+            <IonCardTitle>Nuevo Repositorio</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonInput className="form-input" label="Nombre:" labelPlacement="floating" placeholder="Ej: Mi proyecto" />
+            <IonTextarea className="form-input" label="Descripción:" labelPlacement="floating" placeholder="Escribe aquí..." />
+            <IonInput className="form-input" label="Lenguaje:" labelPlacement="floating" placeholder="Ej: TypeScript - Python - Javascript " />
+            <IonButton expand="block" className="save-button">
+              Guardar
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
       </IonContent>
     </IonPage>
   );
