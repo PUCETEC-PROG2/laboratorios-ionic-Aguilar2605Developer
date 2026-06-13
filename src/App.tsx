@@ -10,7 +10,6 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-// Cambio 1: Importamos logoGithub y eliminamos triangle
 import { logoGithub, ellipse, square } from 'ionicons/icons';
 import { save } from 'ionicons/icons';
 import { personCircle } from 'ionicons/icons';
