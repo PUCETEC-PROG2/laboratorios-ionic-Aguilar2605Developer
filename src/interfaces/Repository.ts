@@ -1,6 +1,9 @@
 export interface Repository {
+  id: number;
   name: string;
   description: string;
   language: string;
-  avatarUrl: string;
+  owner: {
+    avatar_url: string;
+  };
 }

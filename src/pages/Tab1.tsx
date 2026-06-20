@@ -1,48 +1,64 @@
-import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useState, useEffect } from 'react';
+import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, IonLoading, IonText } from '@ionic/react';
 import RepoItem from '../components/RepoItem';
+import { getRepos } from '../services/githubService'; // Importamos el servicio donde está la lógica de la API
 import './Tab1.css';
 
-const repos = [
-  {
-    name: 'Colección de Proyectos',
-    description: 'Proyectos desarrollados en Django, Kotlin y Typescript',
-    language: 'python, kotlin, typescript',
-    avatarUrl: 'https://download-warehouse.sketchup.com/warehouse/v1.0/content/public/a27b0928-759c-43c2-b4e6-a44af9311ffb'
-  },
-  {
-    name: 'Proyecto Integrador',
-    description: 'Proyectos de titulación',
-    language: 'python, kotlin, typescript',
-    avatarUrl: 'https://download-warehouse.sketchup.com/warehouse/v1.0/content/public/a27b0928-759c-43c2-b4e6-a44af9311ffb'
-  },
-  {
-    name: 'Parcial 2',
-    description: 'Desarrollo Movil - Desarrollo Multiplataforma',
-    language: 'JavaScript',
-    avatarUrl: 'https://download-warehouse.sketchup.com/warehouse/v1.0/content/public/a27b0928-759c-43c2-b4e6-a44af9311ffb'
-  }
-];
-
 const Tab1: React.FC = () => {
+  const [repos, setRepos] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Uso el método GET que implemente en el servicio
+        setLoading(true);
+        const response = await getRepos();
+        setRepos(response.data); // Guardamos la respuesta de la API
+      } catch (err) {
+        setError('No se pudieron cargar los repositorios');
+      } finally {
+        setLoading(false); 
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Laboratorio 7: Componentes GUI de Ionic</IonTitle>
+          <IonTitle>Laboratorio 8: API REST</IonTitle>
         </IonToolbar>
       </IonHeader>
+
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Repositorios</IonTitle>
           </IonToolbar>
         </IonHeader>
-        
-        <IonList className="repo-list">
-          {repos.map((repo, index) => (
-            <RepoItem key={index} repository={repo} />
-          ))}
-        </IonList>
+
+        {/* Spinner de carga mientras llega la respuesta */}
+        <IonLoading isOpen={loading} message={'Cargando...'} />
+
+        {/* Si ocurre un error, mostramos el mensaje al usuario */}
+        {error && (
+          <IonText color="danger" className="ion-padding">
+            <p>{error}</p>
+          </IonText>
+        )}
+
+        {/* Solo mostramos la lista si no está cargando y no hay errores */}
+        {!loading && !error && (
+          <IonList className="repo-list">
+            {repos.map((repo: any) => (
+              <RepoItem key={repo.id} repository={repo} />
+            ))}
+          </IonList>
+        )}
       </IonContent>
     </IonPage>
   );
