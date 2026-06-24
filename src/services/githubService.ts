@@ -29,6 +29,8 @@ export const getRepos = async (): Promise<Repository[]> => {
   }
 }
 
+
+
 // Método GET que trae los datos del usuario autenticado
 export const getUser = async (): Promise<User> => {
   try {
@@ -38,6 +40,22 @@ export const getUser = async (): Promise<User> => {
       },
     });
     if (response.status !== 200) {
+      throw new Error(`${response.statusText}`);
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error(`${(error as Error).message}`);
+  }
+}
+// Método POST que crea nuevos repositorios
+export const postRepos = async (data: Pick<Repository, 'name' | 'description'>): Promise<Repository> => {
+  try {
+    const response = await axios.post(`${GITHUB_API_URL}/user/repos`, data, {
+      headers: {
+        Authorization: `Bearer ${GITHUB_API_TOKEN}`,
+      },
+    });
+    if (response.status !== 201) {
       throw new Error(`${response.statusText}`);
     }
     return response.data;

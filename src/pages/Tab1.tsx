@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, IonText } from '@ionic/react';
+import { useState } from 'react';
+import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, IonText, useIonViewWillEnter } from '@ionic/react';
 import RepoItem from '../components/RepoItem';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { getRepos } from '../services/githubService'; // Importamos el servicio donde está la lógica de la API
@@ -11,22 +11,24 @@ const Tab1: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Uso el método GET que implemente en el servicio
-        setLoading(true);
-        const response = await getRepos();
-        setRepos(response); // getRepos() ya devuelve el array de repos (response.data se resuelve dentro del servicio)
-      } catch (err) {
-        setError('No se pudieron cargar los repositorios');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      // Uso el método GET que implemente en el servicio
+      setLoading(true);
+      const response = await getRepos();
+      setRepos(response); // getRepos() ya devuelve el array de repos (response.data se resuelve dentro del servicio)
+    } catch (err) {
+      setError('No se pudieron cargar los repositorios');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // Se ejecuta cada vez que el usuario entra a este tab, no solo la primera vez
+  // Así, si se creó un repo nuevo en Tab2, aparece aquí sin recargar la página
+  useIonViewWillEnter(() => {
     fetchData();
-  }, []);
+  });
 
   return (
     <IonPage>
@@ -43,8 +45,10 @@ const Tab1: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        
+        {/* Spinner de carga mientras llega la respuesta */}
         {loading && <LoadingSpinner message="Cargando repositorios..." />}
+
+        {/* Si ocurre un error, mostramos el mensaje al usuario */}
         {error && (
           <IonText color="danger" className="ion-padding">
             <p>{error}</p>
