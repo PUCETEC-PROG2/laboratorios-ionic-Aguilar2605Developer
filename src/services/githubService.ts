@@ -63,3 +63,35 @@ export const postRepos = async (data: Pick<Repository, 'name' | 'description'>):
     throw new Error(`${(error as Error).message}`);
   }
 }
+// Método PATCH que actualiza los repositorios
+export const updateRepo = async (owner: string, repoName: string, data: Pick<Repository, 'name' | 'description'>): Promise<Repository> => {
+  try {
+    const response = await axios.patch(`${GITHUB_API_URL}/repos/${owner}/${repoName}`, data, {
+      headers: {
+        Authorization: `Bearer ${GITHUB_API_TOKEN}`,
+      },
+    });
+    if (response.status !== 200) {
+      throw new Error(`${response.statusText}`);
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error(`${(error as Error).message}`);
+  }
+}
+
+// Método DELETE que elimina un repositorio
+export const deleteRepo = async (owner: string, repoName: string): Promise<void> => {
+  try {
+    const response = await axios.delete(`${GITHUB_API_URL}/repos/${owner}/${repoName}`, {
+      headers: {
+        Authorization: `Bearer ${GITHUB_API_TOKEN}`,
+      },
+    });
+    if (response.status !== 204) {
+      throw new Error(`${response.statusText}`);
+    }
+  } catch (error) {
+    throw new Error(`${(error as Error).message}`);
+  }
+}

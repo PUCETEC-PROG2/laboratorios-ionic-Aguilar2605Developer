@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, IonText, useIonViewWillEnter } from '@ionic/react';
 import RepoItem from '../components/RepoItem';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { getRepos } from '../services/githubService'; // Importamos el servicio donde está la lógica de la API
+import { getRepos } from '../services/githubService'; // CONEXIÓN con el service: importamos solo la función GET que necesitamos
 import type { Repository } from '../interfaces/Repository';
 import './Tab1.css';
 
@@ -13,10 +13,11 @@ const Tab1: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      // Uso el método GET que implemente en el servicio
+      // Se llama directamente a la función getRepos() 
+     //está hecha la petición axios 
       setLoading(true);
       const response = await getRepos();
-      setRepos(response); // getRepos() ya devuelve el array de repos (response.data se resuelve dentro del servicio)
+      setRepos(response); 
     } catch (err) {
       setError('No se pudieron cargar los repositorios');
     } finally {
@@ -24,10 +25,8 @@ const Tab1: React.FC = () => {
     }
   };
 
-  // Se ejecuta cada vez que el usuario entra a este tab, no solo la primera vez
-  // Así, si se creó un repo nuevo en Tab2, aparece aquí sin recargar la página
   useIonViewWillEnter(() => {
-    fetchData();
+    fetchData(); 
   });
 
   return (
@@ -55,11 +54,10 @@ const Tab1: React.FC = () => {
           </IonText>
         )}
 
-        {/* Solo mostramos la lista si no está cargando y no hay errores */}
         {!loading && !error && (
           <IonList className="repo-list">
             {repos.map((repo) => (
-              <RepoItem key={repo.id} repository={repo} />
+              <RepoItem key={repo.id} repository={repo} onUpdated={fetchData} />
             ))}
           </IonList>
         )}
